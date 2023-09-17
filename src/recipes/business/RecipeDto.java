@@ -21,4 +21,13 @@ public class RecipeDto {
                 dto.getDirections()
         );
     }
+
+    public static RecipeDto convertRecipeToDto(Recipe recipe) {
+        return new RecipeDto(
+                recipe.getName(),
+                recipe.getDescription(),
+                recipe.getIngredients(),
+                recipe.getDirections()
+        );
+    }
 }
