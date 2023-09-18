@@ -32,4 +32,12 @@ public class RecipeService {
             throw new ObjectNotFoundException(Recipe.class, "Recipe");
         }
     }
+
+    public void updateRecipe(long id, RecipeDto dto) {
+        Recipe recipe = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(Recipe.class, "Recipe"));
+
+        RecipeDto.copyDtoFieldsToRecipe(dto, recipe);
+        recipe.setDate(LocalDateTime.now());
+        repository.save(recipe);
+    }
 }

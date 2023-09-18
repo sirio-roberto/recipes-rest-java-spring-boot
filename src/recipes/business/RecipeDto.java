@@ -35,4 +35,12 @@ public class RecipeDto {
                 recipe.getDirections()
         );
     }
+
+    public static void copyDtoFieldsToRecipe(RecipeDto dto, Recipe recipe) {
+        recipe.setName(dto.getName());
+        recipe.setCategory(dto.getCategory());
+        recipe.setDescription(dto.getDescription());
+        recipe.setIngredients(dto.getIngredients());
+        recipe.setDirections(dto.getDirections());
+    }
 }

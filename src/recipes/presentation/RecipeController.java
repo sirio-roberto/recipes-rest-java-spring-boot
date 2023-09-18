@@ -38,6 +38,16 @@ public class RecipeController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateRecipe(@PathVariable long id, @Valid @RequestBody RecipeDto dto) {
+        try {
+            service.updateRecipe(id, dto);
+            return ResponseEntity.noContent().build();
+        } catch (ObjectNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/new")
     public ResponseEntity<Object> postRecipe(@Valid @RequestBody RecipeDto dto) {
         Map<String, Long> idObj = Map.of("id", service.createRecipe(dto));
