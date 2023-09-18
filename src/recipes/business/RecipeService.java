@@ -4,7 +4,7 @@ import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 import recipes.persistence.RecipeRepository;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service
 public class RecipeService {
@@ -16,16 +16,13 @@ public class RecipeService {
 
     public long createRecipe(RecipeDto dto) {
         Recipe recipe = RecipeDto.convertDtoToRecipe(dto);
+        recipe.setDate(LocalDateTime.now());
         repository.save(recipe);
         return recipe.getId();
     }
 
-    public RecipeDto getRecipe(long id) {
-        Optional<Recipe> recipe = repository.findById(id);
-        if (recipe.isPresent()) {
-            return RecipeDto.convertRecipeToDto(recipe.get());
-        }
-        throw new ObjectNotFoundException(Recipe.class, "Recipe");
+    public Recipe getRecipe(long id) {
+        return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(Recipe.class, "Recipe"));
     }
 
     public void deleteRecipe(long id) {

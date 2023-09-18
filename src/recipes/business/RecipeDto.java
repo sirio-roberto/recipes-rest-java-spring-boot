@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class RecipeDto {
     private String name;
+    private String category;
     private String description;
     private List<String> ingredients;
     private List<String> directions;
@@ -18,6 +19,7 @@ public class RecipeDto {
     public static Recipe convertDtoToRecipe(RecipeDto dto) {
         return new Recipe(
                 dto.getName(),
+                dto.getCategory(),
                 dto.getDescription(),
                 dto.getIngredients(),
                 dto.getDirections()
@@ -27,6 +29,7 @@ public class RecipeDto {
     public static RecipeDto convertRecipeToDto(Recipe recipe) {
         return new RecipeDto(
                 recipe.getName(),
+                recipe.getCategory(),
                 recipe.getDescription(),
                 recipe.getIngredients(),
                 recipe.getDirections()
