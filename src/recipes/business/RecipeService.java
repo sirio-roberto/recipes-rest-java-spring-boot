@@ -43,10 +43,10 @@ public class RecipeService {
     }
 
     public List<Recipe> getRecipesByName(String name) {
-        return repository.findByNameContainingIgnoreCaseOrderByDate(name);
+        return repository.findByNameContainingIgnoreCaseOrderByDateDesc(name);
     }
 
     public List<Recipe> getRecipesByCategory(String category) {
-        return repository.findByCategoryIgnoreCaseOrderByDate(category);
+        return repository.findByCategoryIgnoreCaseOrderByDateDesc(category);
     }
 }
