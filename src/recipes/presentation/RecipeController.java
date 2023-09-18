@@ -1,5 +1,6 @@
 package recipes.presentation;
 
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class RecipeController {
     public ResponseEntity<Object> getRecipe(@PathVariable long id) {
         try {
             return ResponseEntity.ok(service.getRecipe(id));
-        } catch (IllegalArgumentException ex) {
+        } catch (ObjectNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -32,7 +33,7 @@ public class RecipeController {
         try {
             service.deleteRecipe(id);
             return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException ex) {
+        } catch (ObjectNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
     }

@@ -1,31 +1,38 @@
 package recipes.business;
 
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
+import recipes.persistence.RecipeRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecipeService {
-    private final List<Recipe> recipes = new ArrayList<>();
+    private final RecipeRepository repository;
+
+    public RecipeService(RecipeRepository repository) {
+        this.repository = repository;
+    }
 
     public long createRecipe(RecipeDto dto) {
         Recipe recipe = RecipeDto.convertDtoToRecipe(dto);
-        recipes.add(recipe);
+        repository.save(recipe);
         return recipe.getId();
     }
 
     public RecipeDto getRecipe(long id) {
-        return recipes.stream()
-                .filter(recipe -> recipe.getId() == id)
-                .map(RecipeDto::convertRecipeToDto)
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("Id not found"));
+        Optional<Recipe> recipe = repository.findById(id);
+        if (recipe.isPresent()) {
+            return RecipeDto.convertRecipeToDto(recipe.get());
+        }
+        throw new ObjectNotFoundException(Recipe.class, "Recipe");
     }
 
     public void deleteRecipe(long id) {
-        if (!recipes.removeIf(recipe -> recipe.getId() == id)) {
-            throw new IllegalArgumentException("Id not found");
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+        } else {
+            throw new ObjectNotFoundException(Recipe.class, "Recipe");
         }
     }
 }
