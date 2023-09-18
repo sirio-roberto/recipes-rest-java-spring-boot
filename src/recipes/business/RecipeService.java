@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import recipes.persistence.RecipeRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class RecipeService {
@@ -39,5 +40,13 @@ public class RecipeService {
         RecipeDto.copyDtoFieldsToRecipe(dto, recipe);
         recipe.setDate(LocalDateTime.now());
         repository.save(recipe);
+    }
+
+    public List<Recipe> getRecipesByName(String name) {
+        return repository.findByNameContainingIgnoreCaseOrderByDate(name);
+    }
+
+    public List<Recipe> getRecipesByCategory(String category) {
+        return repository.findByCategoryIgnoreCaseOrderByDate(category);
     }
 }

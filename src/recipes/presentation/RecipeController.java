@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import recipes.business.RecipeDto;
 import recipes.business.RecipeService;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/recipe")
@@ -26,6 +28,34 @@ public class RecipeController {
         } catch (ObjectNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Object> getRecipes(@RequestParam Map<String,String> allParams) {
+        try {
+            if (areNameAndCategoryParamsInvalid(allParams)) {
+                throw new ConstraintViolationException(Set.of());
+            }
+            if (allParams.get("name") != null) {
+                return ResponseEntity.ok(service.getRecipesByName(allParams.get("name")));
+            } else {
+                return ResponseEntity.ok(service.getRecipesByCategory(allParams.get("category")));
+            }
+        } catch (ObjectNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    private boolean areNameAndCategoryParamsInvalid(Map<String, String> allParams) {
+        if (allParams == null || allParams.size() != 1) {
+            return true;
+        }
+        for (String key : allParams.keySet()) {
+            if (!"name".equals(key) && !"category".equals(key)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @DeleteMapping("/{id}")
