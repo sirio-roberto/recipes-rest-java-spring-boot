@@ -3,6 +3,7 @@ package recipes.business;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 import recipes.persistence.RecipeRepository;
+import recipes.presentation.RecipeController;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,5 +49,9 @@ public class RecipeService {
 
     public List<Recipe> getRecipesByCategory(String category) {
         return repository.findByCategoryIgnoreCaseOrderByDateDesc(category);
+    }
+
+    public void createRecipes(List<RecipeDto> dtoList) {
+        dtoList.forEach(this::createRecipe);
     }
 }

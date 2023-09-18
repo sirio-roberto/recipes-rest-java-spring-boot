@@ -1,7 +1,6 @@
 package recipes.presentation;
 
 import org.hibernate.ObjectNotFoundException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recipes.business.RecipeDto;
@@ -9,6 +8,7 @@ import recipes.business.RecipeService;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -82,5 +82,11 @@ public class RecipeController {
     public ResponseEntity<Object> postRecipe(@Valid @RequestBody RecipeDto dto) {
         Map<String, Long> idObj = Map.of("id", service.createRecipe(dto));
         return ResponseEntity.ok(idObj);
+    }
+
+    @PostMapping("/newBatch")
+    public ResponseEntity<Object> postRecipes(@RequestBody List<@Valid RecipeDto> dtoList) {
+        service.createRecipes(dtoList);
+        return ResponseEntity.ok().build();
     }
 }
