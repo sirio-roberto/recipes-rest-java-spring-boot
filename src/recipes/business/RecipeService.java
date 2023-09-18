@@ -4,11 +4,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RecipeService {
-    private List<Recipe> recipes = new ArrayList<>();
+    private final List<Recipe> recipes = new ArrayList<>();
 
     public long createRecipe(RecipeDto dto) {
         Recipe recipe = RecipeDto.convertDtoToRecipe(dto);
@@ -22,5 +21,11 @@ public class RecipeService {
                 .map(RecipeDto::convertRecipeToDto)
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("Id not found"));
+    }
+
+    public void deleteRecipe(long id) {
+        if (!recipes.removeIf(recipe -> recipe.getId() == id)) {
+            throw new IllegalArgumentException("Id not found");
+        }
     }
 }

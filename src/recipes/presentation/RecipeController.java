@@ -1,10 +1,12 @@
 package recipes.presentation;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recipes.business.RecipeDto;
 import recipes.business.RecipeService;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -25,8 +27,18 @@ public class RecipeController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteRecipe(@PathVariable long id) {
+        try {
+            service.deleteRecipe(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/new")
-    public ResponseEntity<Object> postRecipe(@RequestBody RecipeDto dto) {
+    public ResponseEntity<Object> postRecipe(@Valid @RequestBody RecipeDto dto) {
         Map<String, Long> idObj = Map.of("id", service.createRecipe(dto));
         return ResponseEntity.ok(idObj);
     }
