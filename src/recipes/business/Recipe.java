@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,13 +27,15 @@ public class Recipe {
 
     @NotNull
     @Size(min = 1)
-    private String[] ingredients;
+    @ElementCollection
+    private List<String> ingredients;
 
     @NotNull
     @Size(min = 1)
-    private String[] directions;
+    @ElementCollection
+    private List<String> directions;
 
-    public Recipe(String name, String description, @Size(min = 1) String[] ingredients, @Size(min = 1) String[] directions) {
+    public Recipe(String name, String description, @Size(min = 1) List<String> ingredients, @Size(min = 1) List<String> directions) {
         this.name = name;
         this.description = description;
         this.ingredients = ingredients;
