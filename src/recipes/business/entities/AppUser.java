@@ -21,10 +21,10 @@ public class AppUser {
     private Long id;
 
     @NotBlank
-//    @Email
-    private String username;
+    @Email
+    private String email;
 
     @NotBlank
-//    @Size(min = 8)
+    @Size(min = 8)
     private String password;
 }
