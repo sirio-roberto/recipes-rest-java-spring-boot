@@ -44,10 +44,12 @@ public class SecurityConfig {
                         .antMatchers("/api/recipe/*").authenticated()
                         .antMatchers(HttpMethod.POST, "/actuator/shutdown").permitAll()
                         .antMatchers(HttpMethod.POST, "/api/register").permitAll()
+                        .antMatchers( "/h2-console/**").permitAll()
                         .anyRequest().denyAll()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
+                .headers(frame -> frame.frameOptions().disable())
                 .build();
     }
 }
