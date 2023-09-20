@@ -3,33 +3,35 @@ package recipes.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import recipes.business.AppAppUserDetailsServiceImpl;
+import recipes.business.AppUserDetailsService;
 
 @Configuration
 public class SecurityConfig {
+    private final AppUserDetailsService userDetailsService;
+
+    public SecurityConfig(AppUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user1 = User.withUsername("user1")
-                .password(this.passwordEncoder().encode("pass1"))
-                .roles()
-                .build();
+    public AppUserDetailsService userDetailsService(AppAppUserDetailsServiceImpl appUserDetailsService) {
+        return appUserDetailsService;
+    }
 
-        UserDetails user2 = User.withUsername("user2")
-                .password(this.passwordEncoder().encode("pass2"))
-                .roles()
-                .build();
-
-        return new InMemoryUserDetailsManager(user1, user2);
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
     }
 
     @Bean
@@ -41,11 +43,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(matcherRegistry -> matcherRegistry
-                        .antMatchers("/api/recipe/*").authenticated()
-                        .antMatchers(HttpMethod.POST, "/actuator/shutdown").permitAll()
-                        .antMatchers(HttpMethod.POST, "/api/register").permitAll()
                         .antMatchers( "/h2-console/**").permitAll()
-                        .anyRequest().denyAll()
+                        .antMatchers(HttpMethod.POST, "/api/register").permitAll()
+                        .antMatchers(HttpMethod.POST, "/actuator/shutdown").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)

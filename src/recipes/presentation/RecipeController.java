@@ -93,6 +93,11 @@ public class RecipeController {
         return ResponseEntity.ok("New user successfully registered");
     }
 
+    @GetMapping("/allUsers")
+    public ResponseEntity<Object> getUsers() {
+        return ResponseEntity.ok(userRepository.findAll());
+    }
+
     private boolean areNameAndCategoryParamsInvalid(Map<String, String> allParams) {
         if (allParams == null || allParams.size() != 1) {
             return true;

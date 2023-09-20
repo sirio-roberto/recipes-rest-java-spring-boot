@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import recipes.persistence.AppUserRepository;
 
 @Service
-public class AppUserDetailsServiceImpl implements UserDetailsService {
+public class AppAppUserDetailsServiceImpl implements AppUserDetailsService {
     private final AppUserRepository repository;
 
-    public AppUserDetailsServiceImpl(AppUserRepository repository) {
+    public AppAppUserDetailsServiceImpl(AppUserRepository repository) {
         this.repository = repository;
     }
 
