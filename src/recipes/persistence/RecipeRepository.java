@@ -2,7 +2,7 @@ package recipes.persistence;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import recipes.business.Recipe;
+import recipes.business.entities.Recipe;
 
 import java.util.List;
 

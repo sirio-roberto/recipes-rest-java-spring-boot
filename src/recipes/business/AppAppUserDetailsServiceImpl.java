@@ -3,6 +3,8 @@ package recipes.business;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import recipes.business.entities.AppUser;
+import recipes.business.entities.AppUserAdapter;
 import recipes.persistence.AppUserRepository;
 
 @Service

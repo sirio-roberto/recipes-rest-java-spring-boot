@@ -1,7 +1,8 @@
-package recipes.business;
+package recipes.business.entities;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import recipes.business.entities.AppUser;
 
 import java.util.Collection;
 import java.util.List;
