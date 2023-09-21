@@ -43,6 +43,10 @@ public class Recipe {
     @ElementCollection
     private List<String> directions;
 
+    @ManyToOne
+    @JsonIgnore
+    private AppUser user;
+
     public Recipe(String name, String category, String description, @Size(min = 1) List<String> ingredients, @Size(min = 1) List<String> directions) {
         this.name = name;
         this.category = category;
