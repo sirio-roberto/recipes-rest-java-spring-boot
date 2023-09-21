@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
         Map<String, Object> response = new HashMap<>();
         response.put("error", "Validation Error");
-        response.put("message", "Invalid recipe request body!");
+        response.put("message", "Invalid request body!");
         return ResponseEntity.badRequest().body(response);
     }
 }

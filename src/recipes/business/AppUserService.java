@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import recipes.business.entities.AppUser;
 import recipes.persistence.AppUserRepository;
 
+import javax.validation.ConstraintViolationException;
+import java.util.Set;
+
 @Service
 public class AppUserService {
     private final AppUserRepository repository;
@@ -16,6 +19,9 @@ public class AppUserService {
     }
 
     public void registerUser(AppUser user) {
+//        if (repository.findAppUserByEmail(user.getEmail()).isPresent()) {
+//            throw new IllegalArgumentException("Email is already taken!");
+//        }
         user.setPassword(encoder.encode(user.getPassword()));
 
         repository.save(user);

@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.*;
 import recipes.business.entities.AppUser;
 import recipes.business.AppUserService;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -18,7 +20,11 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<Object> registerUser(@Valid @RequestBody AppUser user) {
-        service.registerUser(user);
+        try {
+            service.registerUser(user);
+        } catch (RuntimeException ex) {
+            throw new ConstraintViolationException(Set.of());
+        }
         return ResponseEntity.ok().build();
     }
 
