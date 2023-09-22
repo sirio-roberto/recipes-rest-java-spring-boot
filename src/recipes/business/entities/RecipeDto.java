@@ -26,16 +26,6 @@ public class RecipeDto {
         );
     }
 
-    public static RecipeDto convertRecipeToDto(Recipe recipe) {
-        return new RecipeDto(
-                recipe.getName(),
-                recipe.getCategory(),
-                recipe.getDescription(),
-                recipe.getIngredients(),
-                recipe.getDirections()
-        );
-    }
-
     public static void copyDtoFieldsToRecipe(RecipeDto dto, Recipe recipe) {
         recipe.setName(dto.getName());
         recipe.setCategory(dto.getCategory());

@@ -13,7 +13,6 @@ import recipes.persistence.RecipeRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RecipeService {
