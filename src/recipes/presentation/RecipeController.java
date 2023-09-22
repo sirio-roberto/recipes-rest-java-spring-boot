@@ -1,6 +1,7 @@
 package recipes.presentation;
 
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recipes.business.entities.RecipeDto;
@@ -49,8 +50,11 @@ public class RecipeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteRecipe(@PathVariable long id) {
         try {
-            service.deleteRecipe(id);
-            return ResponseEntity.noContent().build();
+            if (service.deleteRecipe(id)) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
         } catch (ObjectNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
@@ -59,8 +63,11 @@ public class RecipeController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateRecipe(@PathVariable long id, @Valid @RequestBody RecipeDto dto) {
         try {
-            service.updateRecipe(id, dto);
-            return ResponseEntity.noContent().build();
+            if (service.updateRecipe(id, dto)) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
         } catch (ObjectNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }

@@ -13,6 +13,7 @@ import recipes.persistence.RecipeRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecipeService {
@@ -47,20 +48,26 @@ public class RecipeService {
         return recipeRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(Recipe.class, "Recipe"));
     }
 
-    public void deleteRecipe(long id) {
-        if (recipeRepository.existsById(id)) {
-            recipeRepository.deleteById(id);
-        } else {
-            throw new ObjectNotFoundException(Recipe.class, "Recipe");
-        }
-    }
-
-    public void updateRecipe(long id, RecipeDto dto) {
+    public boolean deleteRecipe(long id) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(Recipe.class, "Recipe"));
 
-        RecipeDto.copyDtoFieldsToRecipe(dto, recipe);
-        recipe.setDate(LocalDateTime.now());
-        recipeRepository.save(recipe);
+        if (getUserFromRequest().equals(recipe.getUser())) {
+            recipeRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateRecipe(long id, RecipeDto dto) {
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(Recipe.class, "Recipe"));
+
+        if (getUserFromRequest().equals(recipe.getUser())) {
+            RecipeDto.copyDtoFieldsToRecipe(dto, recipe);
+            recipe.setDate(LocalDateTime.now());
+            recipeRepository.save(recipe);
+            return true;
+        }
+        return false;
     }
 
     public List<Recipe> getRecipesByName(String name) {
